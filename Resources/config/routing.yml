@@ -1,0 +1,3 @@
+maith_common_image_show:
+    pattern:  /im/{url}
+    defaults: { _controller: MaithCommonImageBundle:Default:showImage }

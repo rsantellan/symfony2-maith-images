@@ -1,0 +1,19 @@
+parameters:
+#    maith_common_image.example.class: Maith\Common\ImageBundle\Example
+
+services:
+    maith_common_image.twig.maith_m_price:
+        class: "Maith\Common\ImageBundle\Twig\mPriceExtension"
+        tags: 
+            -  { name: twig.extension }
+            
+    maith_common_image.twig.maith_m_image:
+        class: "Maith\Common\ImageBundle\Twig\mImageExtension"
+        arguments: 
+             - "@router"
+             - "%kernel.root_dir%"
+        tags: 
+            -  { name: twig.extension }
+
+    maith_common_image.image.mimage:
+        class: "Maith\Common\ImageBundle\Model\MyImageService"
