@@ -8,7 +8,7 @@ use Imagine\Gd\Imagine as gdImagine;
 use Imagine\Gmagick\Imagine as gMagick;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\RGB as mPalette;
 
 /**
  * Description of MyImageManager
@@ -246,7 +246,8 @@ class MyImageService {
       }
       $image->resize(new Box($resize_width, $resize_height));
     }
-    $collage = $this->imageInterface->create(new Box($width, $height), new Color($background, 100));
+    $pallete = new mPalette();
+    $collage = $this->imageInterface->create(new Box($width, $height), $pallete->color($background, 100));
     $pointX = 0;
     $pointY = 0;
     if($width > $height)
