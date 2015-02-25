@@ -31,7 +31,20 @@ imagesManager.prototype = {
     
     initializeAlbumUploaderBox: function()
     {
-      $(".album_uploader_link").colorbox({iframe: true, width: "80%", height: "80%"});
+      $(".album_uploader_link").colorbox(
+        {
+          iframe: true, 
+          width: "80%", 
+          height: "80%"
+        }
+      );
+      $(".album_uploader_video_link").colorbox(
+        {
+          width: "80%", 
+          height: "80%"
+        }
+      );
+        
     },
     
     initializeAlbumSortableBox: function()
@@ -124,6 +137,33 @@ imagesManager.prototype = {
           }
       });
       return false; 
+    },
+    
+    sendOnlineVideoData: function(form)
+    {
+      $.ajax({
+          url: $(form).attr('action'),
+          data: $(form).serialize(),
+          type: 'post',
+          dataType: 'json',
+          success: function(json){
+              if(json.result == "false" || json.result == false)
+              {
+                $("#video_online_container").replaceWith(json.html).append(json.message);
+              }
+              else
+              {
+                $("#video_online_container").replaceWith(json.message);
+                imagesManager.getInstance().refreshAlbums(json.albumId);
+              }
+          }
+          , 
+          complete: function()
+          {
+            $.colorbox.resize();
+          }
+      });
+      return false; 
     }
 
 }
@@ -134,3 +174,4 @@ $( document ).ready(function() {
     imagesManager.getInstance().initializeAlbumSortableBox();
     imagesManager.getInstance().createColorboxMiniatureFrames();
 });
+
