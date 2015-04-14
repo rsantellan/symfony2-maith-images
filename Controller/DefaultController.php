@@ -47,6 +47,7 @@ class DefaultController extends Controller
 	  }
       //var_dump($image); die;
       $logger->debug('Show Image Action, image path is -------->>'.$image);
+      $logger->debug('Show Image Action, image type is -------->>'.$type);
       $return = "";
       switch ($type) {
         case "t":
@@ -65,7 +66,8 @@ class DefaultController extends Controller
           $return = $imageService->doResizeCenterCropExact($image, $width, $height);
           break;
         default:
-          $return = $imageService->doThumbnail($image, $width, $height);
+          $logger->debug('Retrieving original image -------->>');
+          $return = $imageService->retrieveOriginal($image);
           break;
       }
       $return_info = pathinfo($return);

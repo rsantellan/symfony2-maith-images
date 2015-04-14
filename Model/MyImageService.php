@@ -264,6 +264,20 @@ class MyImageService {
     return $tmp_file;
   }
   
+  public function retrieveOriginal($image_path)
+  {
+    if(!is_file($image_path)){
+      throw new \Exception("No file in that path", 10005);
+    }
+    $tmp_file = $this->retrieveCachePath($image_path, 'original', array());
+    if(is_file($tmp_file))
+    {
+      return $tmp_file;
+    }
+    $this->imageInterface->open($image_path)->save($tmp_file);
+    return $tmp_file;
+  }
+  
   public function doThumbnail($image_path, $width, $height)
   {
     if(!is_file($image_path)){
