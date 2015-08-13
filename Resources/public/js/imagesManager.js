@@ -126,6 +126,7 @@ imagesManager.prototype = {
               else
               {
                 $("#form_errors_admin_file").html(" ");
+                imagesManager.getInstance().refreshAlbums(json.albumId);
               }
           }
           , 
