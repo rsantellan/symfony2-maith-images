@@ -340,6 +340,11 @@ class MyImageService {
 	  {
 		return $this->actualRetriveCachePath($path, $aux_root_dir, $this->cache_dir, $type, $parameters);
 	  }
+      if(is_file($path))
+      {
+        $cache = $this->actualRetriveCachePath($path, 'images', $this->cache_dir, $type, $parameters);
+        return $cache;
+      }
 	}
     throw new \Exception("No funca con cosas de afuera (por lo menos por ahora....)");
     //return $path;
@@ -358,7 +363,12 @@ class MyImageService {
         $file_extension = $cache_path_info["extension"];
       }
       $cache_file_name =  $cache_path_info["filename"].".".$cache_path_info["extension"];
-      return $this->checkDirectoryPath($cache_path_info["dirname"].DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.implode("", $parameters).DIRECTORY_SEPARATOR). $cache_file_name;	
+      if(count($parameters) == 0)
+      {
+        $parameters['none'] = 'none';
+      }
+      $paths = ($cache_path_info["dirname"].DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.implode("", $parameters).DIRECTORY_SEPARATOR);
+      return $this->checkDirectoryPath($paths). $cache_file_name;	
   }
   
   private function validateFileExtension($file_extension)
@@ -369,7 +379,6 @@ class MyImageService {
   
   private function checkDirectoryPath($directory_path)
   {
-    //var_dump($directory_path);
     if(!is_dir($directory_path))
     {
       mkdir($directory_path, 0755, true);
