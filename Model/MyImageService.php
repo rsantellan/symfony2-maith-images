@@ -234,7 +234,10 @@ class MyImageService implements ImageManagerInterface{
     {
       return $tmp_file;
     }
-    $this->imageInterface->open($image_path)->thumbnail(new Box($width, $height))->save($tmp_file);
+    $this->imageInterface
+      ->open($image_path)
+      ->thumbnail(new Box($width, $height), \Imagine\Image\ImageInterface::THUMBNAIL_INSET)
+      ->save($tmp_file);
     return $tmp_file;
   }
   
