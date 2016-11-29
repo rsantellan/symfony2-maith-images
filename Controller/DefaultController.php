@@ -5,7 +5,7 @@ namespace Maith\Common\ImageBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-// use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -14,7 +14,7 @@ class DefaultController extends Controller
         return $this->render('MaithCommonImageBundle:Default:index.html.twig', array('name' => $name));
     }
     
-    public function showImageAction($url)
+    public function showImageAction(Request $request, $url)
     {
       $logger = $this->get('logger');
       $data = unserialize(base64_decode($url));
@@ -26,9 +26,6 @@ class DefaultController extends Controller
       $in_root = $data['r'];
       $imageService = $this->get('maith_common_image.image.mimage');
       $root_dir = $this->get('kernel')->getRootDir();
-      //var_dump($in_root);
-      //var_dump($image);
-      //var_dump($root_dir);
       if($in_root == 1)
       {
         $image = $root_dir.$image;
@@ -45,9 +42,6 @@ class DefaultController extends Controller
 		  $image = $aux_path.$image;
 		}
 	  }
-      //var_dump($image); die;
-      $logger->debug('Show Image Action, image path is -------->>'.$image);
-      $logger->debug('Show Image Action, image type is -------->>'.$type);
       $return = "";
       switch ($type) {
         case "t":
@@ -82,7 +76,7 @@ class DefaultController extends Controller
       $response->setExpires($expireDateTime);
       $response->setLastModified($modifiedDateTime);
       $response->setEtag($url);
-      if($response->isNotModified($this->getRequest()))
+      if($response->isNotModified($request))
       {
         $response->setStatusCode(304);
         return $response;
