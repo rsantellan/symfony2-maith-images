@@ -1,15 +1,22 @@
 parameters:
     maith_common_image.twig.image.class: Maith\Common\ImageBundle\Twig\mImageExtension
     maith_common_image.image.service.class: Maith\Common\ImageBundle\Model\MyImageService
+    maith_common_image.image.service.class: Maith\Common\ImageBundle\Model\MyImageService
+    maith_common_image.image.generator.class: Maith\Common\ImageBundle\Model\ImageUrlGeneratorService
 
 services:
     maith_common_image.twig.maith_m_image:
         class: %maith_common_image.twig.image.class%
         arguments: 
-             - "@router"
-             - "%kernel.root_dir%"
+             - "@maith_common_image.image.urlgenerator"
         tags: 
             -  { name: twig.extension }
 
     maith_common_image.image.mimage:
         class: %maith_common_image.image.service.class%
+        
+    maith_common_image.image.urlgenerator:
+        class: %maith_common_image.image.generator.class%
+        arguments: 
+             - "@router"
+             - "%kernel.root_dir%"
