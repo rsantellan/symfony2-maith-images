@@ -30,46 +30,53 @@ class DefaultController extends Controller
       {
         $image = $root_dir.$image;
       }
-	  else
-	  {
-		if($in_root == 2)
-		{
-		  $aux_path = dirname($root_dir);
-          if(strpos($image, DIRECTORY_SEPARATOR) !== 0)
-          {
-              $image = DIRECTORY_SEPARATOR . $image;
-          }
-		  $image = $aux_path.$image;
-		}
-	  }
+      else
+      {
+        if($in_root == 2)
+        {
+          $aux_path = dirname($root_dir);
+              if(strpos($image, DIRECTORY_SEPARATOR) !== 0)
+              {
+                  $image = DIRECTORY_SEPARATOR . $image;
+              }
+          $image = $aux_path.$image;
+        }
+      }
       $return = "";
-      switch ($type) {
-        case "t":
-          $return = $imageService->doThumbnail($image, $width, $height);
-          break;
-        case "ot":
-          $return = $imageService->doOutboundThumbnail($image, $width, $height);
-          break;
-        case "rce":
-          $return = $imageService->doResizeCropExact($image, $width, $height);
-          break;
-        case "mpr":
-          $return = $imageService->doMaximunPosibleResize($image, $width, $height);
-          break;        
-        case "rcce":
-          $return = $imageService->doResizeCenterCropExact($image, $width, $height);
-          break;
-        default:
-          $logger->debug('Retrieving original image -------->>');
-          $return = $imageService->retrieveOriginal($image);
-          break;
+      $response = new Response();
+      try{
+        switch ($type) {
+          case "t":
+            $return = $imageService->doThumbnail($image, $width, $height);
+            break;
+          case "ot":
+            $return = $imageService->doOutboundThumbnail($image, $width, $height);
+            break;
+          case "rce":
+            $return = $imageService->doResizeCropExact($image, $width, $height);
+            break;
+          case "mpr":
+            $return = $imageService->doMaximunPosibleResize($image, $width, $height);
+            break;        
+          case "rcce":
+            $return = $imageService->doResizeCenterCropExact($image, $width, $height);
+            break;
+          default:
+            $logger->debug('Retrieving original image -------->>');
+            $return = $imageService->retrieveOriginal($image);
+            break;
+        }        
+      }catch(\Exception $e){
+        $this->get('logger')->error($e->getMessage());
+        $response->setStatusCode(404);
+        return $response;
       }
       $return_info = pathinfo($return);
       $last_modified_time = filemtime($return);
       $modifiedDateTime = new \DateTime();
       $modifiedDateTime->setTimestamp($last_modified_time);
       
-      $response = new Response();
+      
       $response->setPublic();
       $expireDateTime = new \DateTime();
       $expireDateTime->add(new \DateInterval('P1M'));
