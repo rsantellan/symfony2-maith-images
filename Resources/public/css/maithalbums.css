@@ -77,3 +77,7 @@ div.edit_media_container input.edit_media_input {
 div.edit_media_container div.saving_image_admin_file_container{
   display: none;
 }
+
+div.show-grid {
+ margin-top: 10px;
+}

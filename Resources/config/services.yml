@@ -1,7 +1,6 @@
 parameters:
     maith_common_image.twig.image.class: Maith\Common\ImageBundle\Twig\mImageExtension
     maith_common_image.image.service.class: Maith\Common\ImageBundle\Model\MyImageService
-    maith_common_image.image.service.class: Maith\Common\ImageBundle\Model\MyImageService
     maith_common_image.image.generator.class: Maith\Common\ImageBundle\Model\ImageUrlGeneratorService
 
 services:
@@ -14,6 +13,7 @@ services:
 
     maith_common_image.image.mimage:
         class: %maith_common_image.image.service.class%
+        arguments: ["@logger", "%kernel.root_dir%", "%kernel.cache_dir%"]
         
     maith_common_image.image.urlgenerator:
         class: %maith_common_image.image.generator.class%

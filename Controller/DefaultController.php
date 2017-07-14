@@ -18,7 +18,7 @@ class DefaultController extends Controller
     {
       $logger = $this->get('logger');
       $data = unserialize(base64_decode($url));
-      $logger->debug('Show Image Action, data string is -------->>'.implode("|", $data));
+      $logger->debug('Show Image Action, data string is', $data);
       $image = $data['p'];
       $width = $data['w'];
       $height = $data['h'];
@@ -67,7 +67,7 @@ class DefaultController extends Controller
             break;
         }        
       }catch(\Exception $e){
-        $this->get('logger')->error($e->getMessage());
+        $this->get('logger')->error($e->getMessage(), [$e]);
         $response->setStatusCode(404);
         return $response;
       }

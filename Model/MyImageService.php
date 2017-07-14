@@ -2,6 +2,7 @@
 
 namespace Maith\Common\ImageBundle\Model;
 
+use Monolog\Logger;
 
 use Imagine\Imagick\Imagine as mImagick;
 use Imagine\Gd\Imagine as gdImagine;
@@ -17,42 +18,39 @@ use Imagine\Image\Palette\RGB as mPalette;
  */
 class MyImageService implements ImageManagerInterface{
   
+  protected $logger;
   private $imageInterface = null;
   private $cache_dir = NULL;
   private $root_dir = NULL;
   
-  public function __construct() {
+  public function __construct(Logger $logger, $root_dir, $cache_dir) {
+    $this->logger = $logger;
+    $this->root_dir = $root_dir;
+    $this->cache_dir = $cache_dir;
+    $this->logger->addDebug('Starting Image Service', [$root_dir, $cache_dir]);
     if (class_exists('Imagick'))
     {
         $this->imageInterface = new mImagick();
+        $this->logger->addDebug('Using image magick');
     }
     else
     {
         if (class_exists('Gmagick'))
         {
             $this->imageInterface = new gMagick();
+            $this->logger->addDebug('Using gmagick');
         }
         else 
         {
             $this->imageInterface = new gdImagine();
+            $this->logger->addDebug('Using gd');
         }
     }
-    
-    $kernel_container = null;
-    if(get_class($GLOBALS['kernel']) == "AppCache")
-    {
-        $kernel_container = $GLOBALS['kernel']->getKernel()->getContainer()->get('kernel');
-    }
-    else
-    {
-        $kernel_container = $GLOBALS['kernel']->getContainer()->get('kernel');
-    }
-    $this->root_dir = $kernel_container->getRootDir() ;
-    $this->cache_dir = $kernel_container->getCacheDir() ;
   }
   
   public function doResizeCropExact($image_path, $width, $height)
   {
+    $this->logger->addDebug('doResizeCropExact', [$image_path, $width, $height]);
     if(!is_file($image_path)){
       throw new \Exception("No file in that path", 10005);
     }
@@ -103,6 +101,7 @@ class MyImageService implements ImageManagerInterface{
   
   public function doResizeCenterCropExact($image_path, $width, $height)
   {
+    $this->logger->addDebug('doResizeCenterCropExact', [$image_path, $width, $height]);
     if(!is_file($image_path)){
       throw new \Exception("No file in that path", 10005);
     }
@@ -151,6 +150,7 @@ class MyImageService implements ImageManagerInterface{
   
   public function doMaximunPosibleResize($image_path, $width, $height, $background = 'ffffff')
   {
+    $this->logger->addDebug('doMaximunPosibleResize', [$image_path, $width, $height, $background]);
     if(!is_file($image_path)){
       throw new \Exception("No file in that path", 10005);
     }
@@ -211,6 +211,7 @@ class MyImageService implements ImageManagerInterface{
   
   public function retrieveOriginal($image_path)
   {
+    $this->logger->addDebug('retrieveOriginal', [$image_path]);
     if(!is_file($image_path)){
       throw new \Exception("No file in that path", 10005);
     }
@@ -225,6 +226,7 @@ class MyImageService implements ImageManagerInterface{
   
   public function doThumbnail($image_path, $width, $height)
   {
+    $this->logger->addDebug('doThumbnail', [$image_path, $width, $height]);
     if(!is_file($image_path)){
       throw new \Exception("No file in that path", 10005);
     }
@@ -243,6 +245,7 @@ class MyImageService implements ImageManagerInterface{
   
   public function doOutboundThumbnail($image_path, $width, $height)
   {
+    $this->logger->addDebug('doOutboundThumbnail', [$image_path, $width, $height]);
     if(!is_file($image_path)){
       throw new \Exception("No file in that path", 10005);
     }

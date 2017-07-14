@@ -3,6 +3,7 @@
 namespace Maith\Common\ImageBundle\Model;
 
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Description of ImageUrlGeneratorService
@@ -19,7 +20,7 @@ class ImageUrlGeneratorService{
 		$this->root_dir = $rootDir;
 	}
 	
-	public function mImageFilter($image, $width = 400, $height = 400, $type = "t", $inRootDir = false)
+	public function mImageFilter($image, $width = 400, $height = 400, $type = "t", $inRootDir = false, $absoluteUrl = false)
 	{
 		$in_root = 0;
 		if($inRootDir){
@@ -38,6 +39,9 @@ class ImageUrlGeneratorService{
 		}
 		$url_data = array("p" => $image, "w"=>$width, "h" => $height, "t" => $type, 'r' => $in_root);
 		$url = base64_encode(serialize($url_data));
+		if($absoluteUrl){
+			return $this->router->generate("maith_common_image_show", array('url' => $url), UrlGeneratorInterface::ABSOLUTE_URL);
+		}
 		return $this->router->generate("maith_common_image_show", array('url' => $url));
 	}
 
