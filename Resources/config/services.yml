@@ -5,18 +5,18 @@ parameters:
 
 services:
     maith_common_image.twig.maith_m_image:
-        class: %maith_common_image.twig.image.class%
+        class: "%maith_common_image.twig.image.class%"
         arguments: 
              - "@maith_common_image.image.urlgenerator"
         tags: 
             -  { name: twig.extension }
 
     maith_common_image.image.mimage:
-        class: %maith_common_image.image.service.class%
+        class: "%maith_common_image.image.service.class%"
         arguments: ["@logger", "%kernel.root_dir%", "%kernel.cache_dir%"]
         
     maith_common_image.image.urlgenerator:
-        class: %maith_common_image.image.generator.class%
+        class: "%maith_common_image.image.generator.class%"
         arguments: 
              - "@router"
              - "%kernel.root_dir%"
