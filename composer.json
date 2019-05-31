@@ -1,5 +1,5 @@
 {
-    "name": "maith-image",
+    "name": "rsantellan/maith-image",
     "type": "symfony-bundle",
     "description": "This is a basic images interface for projects",
     "keywords": ["admin", "bundle", "images"],
